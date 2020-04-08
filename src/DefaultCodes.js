@@ -1,8 +1,8 @@
-var defaultCode_python = [
+export const defaultCode_python = [
     'print("Hello World!")',
 ].join('\n');
 
-var defaultCode_cpp = [
+export const defaultCode_cpp = [
     '#include <iostream>',
     'int main() {',
     '\tstd::cout << "Hello World!" << std::endl;',
@@ -10,7 +10,7 @@ var defaultCode_cpp = [
     '}',
 ].join('\n');
 
-var defaultCode_c = [
+export const defaultCode_c = [
     '#include "stdio.h"',
     'int main() {',
     '\tprintf("Hello World!\\n");',
