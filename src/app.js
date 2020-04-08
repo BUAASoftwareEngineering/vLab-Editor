@@ -1,6 +1,10 @@
 import "./style.css"
-import * as defaultCodes from './DefaultCodes.js';
 import * as monaco from 'monaco-editor';
+
+import * as actions from './Actions.js';
+import * as appearance from './Appearances.js';
+import * as defaultCodes from './DefaultCodes.js';
+import * as editormanage from './Editor.js';
 
 self.MonacoEnvironment = {
 	getWorkerUrl: function (moduleId, label) {
@@ -20,46 +24,5 @@ self.MonacoEnvironment = {
 	}
 }
 
-var fileCounter = 0;
-var editorArray = [];
-
-function newEditor(container_id, code, language) {
-	let model = monaco.editor.createModel(code, language);
-	let editor = monaco.editor.create(document.getElementById(container_id), {
-		model: model,
-	});
-	editorArray.push(editor);
-	return editor;
-}
-
-function addNewEditor(code, language) {
-	let new_container = document.createElement("DIV");
-	new_container.id = "container-" + fileCounter.toString(10);
-	new_container.className = "container";
-	document.getElementById("root").appendChild(new_container);
-	let editor = newEditor(new_container.id, code, language);
-	fileCounter += 1;
-	return editor;
-}
-
-function getCode(editor) {
-	return editor.getModel().getValue();
-}
-
-function getCodeLength(editor) {
-	// chars, including \n, \t !!!
-	return editor.getModel().getValueLength();
-}
-
-function getCursorPosition(editor) {
-	let line = editor.getPosition().lineNumber;
-	let column = editor.getPosition().column;
-	return {ln: line, col:column};
-}
-
-function setCursorPosition(editor, ln, col) {
-	let pos = {lineNumber: ln, column: col};
-	editor.setPosition(pos);
-}
-
-addNewEditor(defaultCodes.defaultCode_cpp, 'cpp');
+editormanage.addNewEditor(defaultCodes.defaultCode_js, 'javascript');
+var editor = editormanage.editorArray[0];

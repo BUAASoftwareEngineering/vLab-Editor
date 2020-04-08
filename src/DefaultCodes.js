@@ -17,3 +17,10 @@ export const defaultCode_c = [
     '\treturn 0;',
     '}',
 ].join('\n');
+
+export const defaultCode_js = [
+    'console.log(123);',
+    'var a = 1;',
+    'var b = 2;',
+    'var c = 3;',
+].join('\n');
