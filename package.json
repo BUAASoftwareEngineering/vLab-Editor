@@ -1,8 +1,9 @@
 {
-  "name": "VisualLabOnlineEditor",
+  "name": "visual-lab-online-editor",
   "dependencies": {},
   "scripts": {
-    "build": "webpack --progress"
+    "build": "webpack --progress",
+    "simpleserver": "yaserver --root ./dist/ --port 8888"
   },
   "devDependencies": {
     "css-loader": "^3.4.0",
@@ -10,6 +11,7 @@
     "monaco-editor": "^0.19.3",
     "style-loader": "^1.1.1",
     "webpack": "^4.41.4",
-    "webpack-cli": "^3.3.10"
+    "webpack-cli": "^3.3.10",
+    "yaserver": "^0.2.0"
   }
 }
