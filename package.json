@@ -1,6 +1,8 @@
 {
   "name": "visual-lab-online-editor",
-  "dependencies": {},
+  "dependencies": {
+    "monaco-themes": "^0.3.3"
+  },
   "scripts": {
     "build": "webpack --progress",
     "simpleserver": "yaserver --root ./dist/ --port 8888"
