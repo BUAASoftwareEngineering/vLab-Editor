@@ -1,5 +1,6 @@
 import "./style.css"
 import * as monaco from 'monaco-editor';
+import $ from 'jquery';
 
 import * as actions from './Actions.js';
 import * as appearance from './Appearances.js';
@@ -26,6 +27,16 @@ self.MonacoEnvironment = {
 
 editormanage.addNewEditor(defaultCodes.defaultCode_js, 'javascript');
 var editor = editormanage.editorArray[0];
+
+$(document).ready(() => {
+	$(".container").keydown((event) => {
+		// https://developer.mozilla.org/zh-CN/docs/Web/API/KeyboardEvent/keyCode, US keyboard, IE11 / Chrome34 / Safari7 / Gecko29
+		if ((event.ctrlKey == true || event.metaKey == true) &&
+			(event.which == '12' || event.which == '61' || event.which == '107' || event.which == '109' || event.which == '171' || event.which == '173' || event.which == '187' || event.which == '189')) {
+			event.preventDefault();
+		}
+	});
+});
 
 actions.bindKeyWithAction(editor, monaco.KeyMod.CtrlCmd | monaco.KeyCode.US_OPEN_SQUARE_BRACKET, "editor.action.jumpToBracket");
 actions.bindKeyWithAction(editor, monaco.KeyMod.CtrlCmd | monaco.KeyCode.US_CLOSE_SQUARE_BRACKET, "editor.action.selectToBracket");

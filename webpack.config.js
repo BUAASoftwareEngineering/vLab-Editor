@@ -24,4 +24,7 @@ module.exports = {
 			use: ['file-loader']
 		}]
 	},
+	externals: {
+		jquery: 'jQuery'
+	}
 };
