@@ -47,4 +47,4 @@ actions.bindKeyWithAction(editor, monaco.KeyMod.Alt | monaco.KeyMod.CtrlCmd | mo
 actions.bindKeyWithAction(editor, monaco.KeyMod.Shift | monaco.KeyMod.CtrlCmd | monaco.KeyCode.US_EQUAL, "editor.unfoldAll");
 actions.bindKeyWithAction(editor, monaco.KeyMod.Shift | monaco.KeyMod.CtrlCmd | monaco.KeyCode.US_MINUS, "editor.foldAll");
 
-appearance.setTheme('solarized-light');
+appearance.setTheme('xcode-default');

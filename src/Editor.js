@@ -6,6 +6,8 @@ export function newEditor(container_id, code, language) {
 	let model = monaco.editor.createModel(code, language);
 	let editor = monaco.editor.create(document.getElementById(container_id), {
 		model: model,
+		automaticLayout: true,
+		scrollBeyondLastLine: false
 	});
 	editorArray.push(editor);
 	return editor;
@@ -15,7 +17,9 @@ export function addNewEditor(code, language) {
 	let new_container = document.createElement("DIV");
 	new_container.id = "container-" + fileCounter.toString(10);
 	new_container.className = "container";
-	document.getElementById("root").appendChild(new_container);
+	new_container.style.height = "100%"
+	new_container.style.width = "100%"
+	document.getElementById("editorRoot").appendChild(new_container);
 	let editor = newEditor(new_container.id, code, language);
 	fileCounter += 1;
 	return editor;
