@@ -24,3 +24,16 @@ export const defaultCode_js = [
     'var b = 2;',
     'var c = 3;',
 ].join('\n');
+
+export const defaultCode_json = `{
+    "base": "vs",
+    "inherit": true,
+    "rules": [
+        {
+        "background": "e2e9ff5e",
+        "token": "text.html source.active4d"
+        }
+    ],
+    "$schema": "http://json.schemastore.org/coffeelint",
+    "line_endings": "unix",
+}`;

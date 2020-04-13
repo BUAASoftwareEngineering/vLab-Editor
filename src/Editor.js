@@ -1,15 +1,26 @@
+import * as monaco from 'monaco-editor';
+import {defaultBindings} from './Actions';
 export var fileCounter = 0;
 export var editorArray = [];
+export var modelToModeluri = new Map();
 
 
 export function newEditor(container_id, code, language) {
-	let model = monaco.editor.createModel(code, language);
+	let modelUri = "inmemory://"+container_id;
+	let monacoUri = monaco.Uri.parse(modelUri);
+	let model = monaco.editor.createModel(code, language, monacoUri);
+
 	let editor = monaco.editor.create(document.getElementById(container_id), {
 		model: model,
 		automaticLayout: true,
-		scrollBeyondLastLine: false
+		scrollBeyondLastLine: false,
+		glyphMargin: true,
+		lightbulb: {
+			enabled: true
+		}
 	});
 	editorArray.push(editor);
+	modelToModeluri.set(model, modelUri);
 	return editor;
 }
 
@@ -22,7 +33,16 @@ export function addNewEditor(code, language) {
 	document.getElementById("editorRoot").appendChild(new_container);
 	let editor = newEditor(new_container.id, code, language);
 	fileCounter += 1;
+	defaultBindings(editor);
 	return editor;
+}
+
+export function getModel(editor) {
+	return editor.getModel();
+}
+
+export function getModeluri(model) {
+	return modelToModeluri.get(model);
 }
 
 export function getCode(editor) {

@@ -11,6 +11,8 @@
     "css-loader": "^3.4.0",
     "file-loader": "^5.0.2",
     "monaco-editor": "^0.19.3",
+    "monaco-languageclient": "^0.13.0",
+    "vscode-json-languageservice": "^3.5.2",
     "style-loader": "^1.1.1",
     "webpack": "^4.41.4",
     "webpack-cli": "^3.3.10",
