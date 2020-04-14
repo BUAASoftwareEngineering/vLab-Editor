@@ -1,4 +1,4 @@
-(self["webpackJsonp"] = self["webpackJsonp"] || []).push([[16],{
+(window["webpackJsonp"] = window["webpackJsonp"] || []).push([[16],{
 
 /***/ "./node_modules/monaco-editor/esm/vs/basic-languages/dockerfile/dockerfile.js":
 /*!************************************************************************************!*\

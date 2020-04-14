@@ -1,4 +1,4 @@
-(self["webpackJsonp"] = self["webpackJsonp"] || []).push([[22],{
+(window["webpackJsonp"] = window["webpackJsonp"] || []).push([[22],{
 
 /***/ "./node_modules/monaco-editor/esm/vs/basic-languages/ini/ini.js":
 /*!**********************************************************************!*\

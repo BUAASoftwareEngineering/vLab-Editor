@@ -1,4 +1,4 @@
-(self["webpackJsonp"] = self["webpackJsonp"] || []).push([[44],{
+(window["webpackJsonp"] = window["webpackJsonp"] || []).push([[44],{
 
 /***/ "./node_modules/monaco-editor/esm/vs/basic-languages/redis/redis.js":
 /*!**************************************************************************!*\

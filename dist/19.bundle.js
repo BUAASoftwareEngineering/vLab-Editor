@@ -1,4 +1,4 @@
-(self["webpackJsonp"] = self["webpackJsonp"] || []).push([[19],{
+(window["webpackJsonp"] = window["webpackJsonp"] || []).push([[19],{
 
 /***/ "./node_modules/monaco-editor/esm/vs/basic-languages/graphql/graphql.js":
 /*!******************************************************************************!*\

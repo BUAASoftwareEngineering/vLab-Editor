@@ -1,4 +1,4 @@
-(self["webpackJsonp"] = self["webpackJsonp"] || []).push([[33],{
+(window["webpackJsonp"] = window["webpackJsonp"] || []).push([[33],{
 
 /***/ "./node_modules/monaco-editor/esm/vs/basic-languages/pascaligo/pascaligo.js":
 /*!**********************************************************************************!*\

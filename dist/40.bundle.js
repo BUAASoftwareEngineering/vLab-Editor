@@ -1,4 +1,4 @@
-(self["webpackJsonp"] = self["webpackJsonp"] || []).push([[40],{
+(window["webpackJsonp"] = window["webpackJsonp"] || []).push([[40],{
 
 /***/ "./node_modules/monaco-editor/esm/vs/basic-languages/pug/pug.js":
 /*!**********************************************************************!*\

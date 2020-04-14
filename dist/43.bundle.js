@@ -1,4 +1,4 @@
-(self["webpackJsonp"] = self["webpackJsonp"] || []).push([[43],{
+(window["webpackJsonp"] = window["webpackJsonp"] || []).push([[43],{
 
 /***/ "./node_modules/monaco-editor/esm/vs/basic-languages/razor/razor.js":
 /*!**************************************************************************!*\

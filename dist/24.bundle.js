@@ -1,4 +1,4 @@
-(self["webpackJsonp"] = self["webpackJsonp"] || []).push([[24],{
+(window["webpackJsonp"] = window["webpackJsonp"] || []).push([[24],{
 
 /***/ "./node_modules/monaco-editor/esm/vs/basic-languages/kotlin/kotlin.js":
 /*!****************************************************************************!*\

@@ -1,4 +1,4 @@
-(self["webpackJsonp"] = self["webpackJsonp"] || []).push([[38],{
+(window["webpackJsonp"] = window["webpackJsonp"] || []).push([[38],{
 
 /***/ "./node_modules/monaco-editor/esm/vs/basic-languages/powerquery/powerquery.js":
 /*!************************************************************************************!*\

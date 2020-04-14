@@ -1,4 +1,4 @@
-(self["webpackJsonp"] = self["webpackJsonp"] || []).push([[59],{
+(window["webpackJsonp"] = window["webpackJsonp"] || []).push([[59],{
 
 /***/ "./node_modules/monaco-editor/esm/vs/basic-languages/twig/twig.js":
 /*!************************************************************************!*\

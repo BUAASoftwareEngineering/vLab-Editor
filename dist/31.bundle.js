@@ -1,4 +1,4 @@
-(self["webpackJsonp"] = self["webpackJsonp"] || []).push([[31],{
+(window["webpackJsonp"] = window["webpackJsonp"] || []).push([[31],{
 
 /***/ "./node_modules/monaco-editor/esm/vs/basic-languages/objective-c/objective-c.js":
 /*!**************************************************************************************!*\

@@ -2,26 +2,22 @@ import * as monaco from 'monaco-editor';
 import {defaultBindings} from './Actions';
 export var fileCounter = 0;
 export var editorArray = [];
-export var modelToModeluri = new Map();
 
 import { getPythonReady } from './language/python';
 
 export function newEditor(container_id, code, language) {
-	let modelUri = "inmemory://"+container_id;
-	let monacoUri = monaco.Uri.parse(modelUri);
-	let model = monaco.editor.createModel(code, language, monacoUri);
+	// when URI provided, editor CANNOT find / go to definitions.
+	let model = monaco.editor.createModel(code, language);
 
 	let editor = monaco.editor.create(document.getElementById(container_id), {
 		model: model,
 		automaticLayout: true,
-		scrollBeyondLastLine: false,
 		glyphMargin: true,
 		lightbulb: {
 			enabled: true
 		}
 	});
 	editorArray.push(editor);
-	modelToModeluri.set(model, modelUri);
 
 	// Language Client for IntelliSense
 	if (language == 'python') {
@@ -48,10 +44,6 @@ export function addNewEditor(code, language) {
 
 export function getModel(editor) {
 	return editor.getModel();
-}
-
-export function getModeluri(model) {
-	return modelToModeluri.get(model);
 }
 
 export function getCode(editor) {

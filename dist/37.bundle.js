@@ -1,4 +1,4 @@
-(self["webpackJsonp"] = self["webpackJsonp"] || []).push([[37],{
+(window["webpackJsonp"] = window["webpackJsonp"] || []).push([[37],{
 
 /***/ "./node_modules/monaco-editor/esm/vs/basic-languages/postiats/postiats.js":
 /*!********************************************************************************!*\
