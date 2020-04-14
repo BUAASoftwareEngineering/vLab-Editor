@@ -30,5 +30,11 @@ module.exports = {
 	node: {
 		fs: 'empty',
 		net: 'empty'
-	}
+	},
+	resolve: {
+        alias: {
+            'vscode': require.resolve('monaco-languageclient/lib/vscode-compatibility')
+        },
+        extensions: ['.js', '.json', '.ttf']
+    }
 };

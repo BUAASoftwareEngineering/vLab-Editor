@@ -4,6 +4,7 @@ export var fileCounter = 0;
 export var editorArray = [];
 export var modelToModeluri = new Map();
 
+import { getPythonReady } from './language/python';
 
 export function newEditor(container_id, code, language) {
 	let modelUri = "inmemory://"+container_id;
@@ -21,6 +22,15 @@ export function newEditor(container_id, code, language) {
 	});
 	editorArray.push(editor);
 	modelToModeluri.set(model, modelUri);
+
+	// Language Client for IntelliSense
+	if (language == 'python') {
+		getPythonReady(editor);
+	}
+
+	// Keyboard Shortcuts binding
+	defaultBindings(editor);
+	
 	return editor;
 }
 
@@ -33,7 +43,6 @@ export function addNewEditor(code, language) {
 	document.getElementById("editorRoot").appendChild(new_container);
 	let editor = newEditor(new_container.id, code, language);
 	fileCounter += 1;
-	defaultBindings(editor);
 	return editor;
 }
 

@@ -35,5 +35,5 @@ export const defaultCode_json = `{
         }
     ],
     "$schema": "http://json.schemastore.org/coffeelint",
-    "line_endings": "unix",
+    "line_endings": "unix"
 }`;

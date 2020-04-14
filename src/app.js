@@ -2,11 +2,9 @@ import "./style.css"
 import * as monaco from 'monaco-editor';
 import $ from 'jquery';
 
-import * as actions from './Actions.js';
 import * as appearance from './Appearances.js';
 import * as defaultCodes from './DefaultCodes.js';
 import * as editormanage from './Editor.js';
-import {getEditorReady} from './language/json';
 
 self.MonacoEnvironment = {
 	getWorkerUrl: function (moduleId, label) {
@@ -26,7 +24,7 @@ self.MonacoEnvironment = {
 	}
 }
 
-editormanage.addNewEditor(defaultCodes.defaultCode_json, 'json');
+editormanage.addNewEditor(defaultCodes.defaultCode_python, 'python');
 var editor = editormanage.editorArray[0];
 
 $(document).ready(() => {
@@ -40,5 +38,3 @@ $(document).ready(() => {
 });
 
 appearance.setTheme('xcode-default');
-
-getEditorReady(editor);
