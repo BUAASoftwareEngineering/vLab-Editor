@@ -1,9 +1,9 @@
 import * as monaco from 'monaco-editor';
 import {defaultBindings} from './Actions';
 export var fileCounter = 0;
-export var editorArray = [];
 
 import { getPythonReady } from './language/python';
+import { getCppReady } from './language/cpp';
 
 export function newEditor(container_id, code, language) {
 	// when URI provided, editor CANNOT find / go to definitions.
@@ -17,11 +17,13 @@ export function newEditor(container_id, code, language) {
 			enabled: true
 		}
 	});
-	editorArray.push(editor);
 
 	// Language Client for IntelliSense
 	if (language == 'python') {
 		getPythonReady(editor);
+	}
+	if (language == 'cpp') {
+		getCppReady(editor);
 	}
 
 	// Keyboard Shortcuts binding
