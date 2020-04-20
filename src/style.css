@@ -23,11 +23,27 @@ body {
     z-index: 0;
 }
 
-.container {
+#container-0 {
     position: fixed;
-    top: 100px;
+    top: 60px;
     left: 0;
-    height: 80vh;
+    height: 400px;
+    width: 80vw;
+    right: 0;
+  
+    margin: 0 auto;
+    display: block;
+  
+    transition: 0.2s;
+    overflow: hidden;
+    z-index: 0;
+}
+
+#container-1 {
+    position: fixed;
+    top: 470px;
+    left: 0;
+    height: 400px;
     width: 80vw;
     right: 0;
   

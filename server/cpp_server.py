@@ -1,6 +1,7 @@
 import logging
 import subprocess
 import threading
+import argparse
 
 from tornado import ioloop, process, web, websocket
 
@@ -24,7 +25,7 @@ class LanguageServerWebSocketHandler(websocket.WebSocketHandler):
 
         # Create an instance of the language server
         proc = process.Subprocess(
-            ['ccls', '--init={"cacheFormat":"json", "index": {"onChange": true, "trackDependency":2}}'],
+            ['ccls', '--init={"cacheFormat":"json", "index": {"onChange": true, "trackDependency":2}, "clang": {"resourceDir": "/home/CppLanguageServer/clang+llvm-10.0.0-x86_64-linux-gnu-ubuntu-18.04/lib/clang/10.0.0"}}'],
             stdin=subprocess.PIPE,
             stdout=subprocess.PIPE
         )
@@ -54,11 +55,13 @@ class LanguageServerWebSocketHandler(websocket.WebSocketHandler):
 
 
 if __name__ == "__main__":
-    '''
-        URL = 'ws://127.0.0.1:3000/cpp'
-    '''
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--host", type=str, default="127.0.0.1")
+    parser.add_argument("--port", type=int, default=3000)
+    args = parser.parse_args()
     app = web.Application([
         (r"/cpp", LanguageServerWebSocketHandler),
     ])
-    app.listen(3000, address='127.0.0.1')
+    print("Started Web Socket at ws://{}:{}/cpp".format(args.host, args.port))
+    app.listen(args.port, address=args.host)
     ioloop.IOLoop.current().start()

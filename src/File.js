@@ -14,7 +14,7 @@ const ext2lang = new Map([
     ['txt', 'plaintext']
 ]);
 
-function filePath2lang(filePath) {
+export function filePath2lang(filePath) {
     let index= filePath.lastIndexOf(".");
     var lang;
     if (index !== -1) {

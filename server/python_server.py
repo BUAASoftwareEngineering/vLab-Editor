@@ -1,6 +1,7 @@
 import logging
 import subprocess
 import threading
+import argparse
 
 from tornado import ioloop, process, web, websocket
 
@@ -46,6 +47,7 @@ class LanguageServerWebSocketHandler(websocket.WebSocketHandler):
 
     def on_message(self, message):
         """Forward client->server messages to the endpoint."""
+        print(message)
         self.writer.write(json.loads(message))
 
     def check_origin(self, origin):
@@ -53,11 +55,13 @@ class LanguageServerWebSocketHandler(websocket.WebSocketHandler):
 
 
 if __name__ == "__main__":
-    '''
-        URL = 'ws://127.0.0.1:3000/python'
-    '''
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--host", type=str, default="127.0.0.1")
+    parser.add_argument("--port", type=int, default=3000)
+    args = parser.parse_args()
     app = web.Application([
         (r"/python", LanguageServerWebSocketHandler),
     ])
-    app.listen(3000, address='127.0.0.1')
+    print("Started Web Socket at ws://{}:{}/python".format(args.host, args.port))
+    app.listen(args.port, address=args.host)
     ioloop.IOLoop.current().start()

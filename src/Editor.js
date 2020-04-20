@@ -5,9 +5,16 @@ export var fileCounter = 0;
 import { getPythonReady } from './language/python';
 import { getCppReady } from './language/cpp';
 
+import { MonacoAppSingleton } from './app';
+import * as webapi from './assets/api';
+import { filePath2lang } from './File';
+
+
 export function newEditor(container_id, code, language, filePath, fileDir, wsUrlBase) {
-	// when URI provided, editor CANNOT find / go to definitions.
-	let model = monaco.editor.createModel(code, language, monaco.Uri.parse("file://" + filePath));
+	let uri = monaco.Uri.parse("file://" + filePath);
+	var model = monaco.editor.getModel(uri);
+	if (!model)
+		model = monaco.editor.createModel(code, language, uri);
 
 	let editor = monaco.editor.create(document.getElementById(container_id), {
 		model: model,
@@ -15,6 +22,52 @@ export function newEditor(container_id, code, language, filePath, fileDir, wsUrl
 		glyphMargin: true,
 		lightbulb: {
 			enabled: true
+		}
+	}, {
+		textModelService: {
+			createModelReference: function (uri) {
+				return this.getModel(uri);
+			},
+			registerTextModelContentProvider: function () {
+				return { dispose: function () { } };
+			},
+			hasTextModelContentProvider: function (schema) {
+				return true;
+			},
+			_buildReference: function (model) {
+				var lifecycle = require('monaco-editor/esm/vs/base/common/lifecycle');
+				var ref = new lifecycle.ImmortalReference({ textEditorModel: model });
+				return {
+					object: ref.object,
+					dispose: function () { ref.dispose(); }
+				};
+			},
+			getModel: function (uri) {
+				var _this = this;
+				return new Promise(function (resolve) {
+					var model = monaco.editor.getModel(uri);
+					console.log("foundedModel @ Peeking = ", model);
+					if (!model) {
+						if (!uri) {
+							model = null;
+							resolve(_this._buildReference(model));
+						}
+						let filePath = uri.path;
+						let p = new Promise((resolve) => {
+							webapi.default.file_content(MonacoAppSingleton.currentProject.projectId, filePath, (obj) => {
+								resolve(obj.data['content']);
+							});
+						});
+						p.then((code) => {
+							model = monaco.editor.createModel(code, filePath2lang(filePath), uri);
+							resolve(_this._buildReference(model));
+						});
+					} else {
+						resolve(_this._buildReference(model));
+					}
+				});
+			},
+			registerTextModelContentProvider: () => { }
 		}
 	});
 
