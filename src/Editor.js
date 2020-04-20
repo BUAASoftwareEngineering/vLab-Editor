@@ -5,9 +5,9 @@ export var fileCounter = 0;
 import { getPythonReady } from './language/python';
 import { getCppReady } from './language/cpp';
 
-export function newEditor(container_id, code, language) {
+export function newEditor(container_id, code, language, filePath, fileDir, wsUrlBase) {
 	// when URI provided, editor CANNOT find / go to definitions.
-	let model = monaco.editor.createModel(code, language);
+	let model = monaco.editor.createModel(code, language, monaco.Uri.parse("file://" + filePath));
 
 	let editor = monaco.editor.create(document.getElementById(container_id), {
 		model: model,
@@ -23,7 +23,7 @@ export function newEditor(container_id, code, language) {
 		getPythonReady(editor);
 	}
 	if (language == 'cpp') {
-		getCppReady(editor);
+		getCppReady(editor, fileDir, wsUrlBase + "/cpp");
 	}
 
 	// Keyboard Shortcuts binding
@@ -32,14 +32,14 @@ export function newEditor(container_id, code, language) {
 	return editor;
 }
 
-export function addNewEditor(code, language) {
+export function addNewEditor(code, language, filePath, fileDir, wsUrlBase) {
 	let new_container = document.createElement("DIV");
 	new_container.id = "container-" + fileCounter.toString(10);
 	new_container.className = "container";
 	new_container.style.height = "100%"
 	new_container.style.width = "100%"
 	document.getElementById("editorRoot").appendChild(new_container);
-	let editor = newEditor(new_container.id, code, language);
+	let editor = newEditor(new_container.id, code, language, filePath, fileDir, wsUrlBase);
 	fileCounter += 1;
 	return editor;
 }

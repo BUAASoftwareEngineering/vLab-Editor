@@ -7,7 +7,7 @@ import {
 const ReconnectingWebSocket = require('reconnecting-websocket');
 
 
-export function getCppReady(editor) {
+export function getCppReady(editor, BASE_DIR, url) {
 
     monaco.languages.register({
         id: 'cpp',
@@ -15,9 +15,11 @@ export function getCppReady(editor) {
         aliases: ['cpp', 'CPP', 'c', 'C'],
     });
 
-    MonacoServices.install(editor);
+    MonacoServices.install(editor, {
+        rootUri: BASE_DIR
+    });
 
-    const url = 'ws://127.0.0.1:3000/cpp';
+    console.log("using Web Socket URL = ", url);
     const webSocket = createWebSocket(url);
     listen({
         webSocket,

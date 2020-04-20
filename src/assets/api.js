@@ -23,6 +23,9 @@ function get_request(url, callback) {
             if (obj.data == undefined) {
                 obj.data = {}
             }
+            if (url.split('?')[0] == server + '/file/content') {
+                obj.data.content = new TextDecoder('utf-8').decode(new Buffer(obj.data.content))
+            }
             callback(obj)
         } else if (http.readyState == 4) {
             console.log('get fail')
@@ -173,7 +176,7 @@ function file_update(project_id, file_path, file_content, callback) {
     var url = server + '/file/update'
     var data =  'project_id=' + encodeURIComponent(project_id) + 
                 '&file_path=' + encodeURIComponent(file_path) + 
-                '&file_content=' + encodeURIComponent(file_content)
+                '&file_content=' + encodeURIComponent(JSON.stringify(Buffer(new TextEncoder('utf-8').encode(file_content))))
     post_request(url, data, callback)
 }
 

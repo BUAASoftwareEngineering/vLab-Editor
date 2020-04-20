@@ -2,8 +2,6 @@ import { defaultCode_language } from './DefaultCodes.js';
 import { addNewEditor, getCode } from './Editor.js';
 import * as webapi from './assets/api';
 
-import { project_id } from './app';
-
 const ext2lang = new Map([
     ['js', 'javascript'],
     ['ts', 'typescript'],
@@ -31,26 +29,27 @@ function filePath2lang(filePath) {
     return lang;
 }
 
-var editor2path = new Map();
-
-
-export async function openFile(filePath) {
+export async function openFile(project_id, filePath, fileDir, wsUrl, newlyCreated = true) {
     let language = filePath2lang(filePath);
-    let file_content = await new Promise((resolve) => {
-		webapi.default.file_content(project_id, "test_editor.cpp", (obj) => {
-			console.log("file_content: ", obj);
-			resolve(obj);
-		});
-    });
 
-    var editor = addNewEditor(file_content.data['content'], language);
-    editor2path.set(editor, filePath);
-    return editor;
+    if (newlyCreated == true) {
+        var editor = addNewEditor(defaultCode_language(language), language, filePath, fileDir, wsUrl);
+        saveFile(project_id, editor, filePath);
+        return editor;
+    } else {
+        let file_content = await new Promise((resolve) => {
+            webapi.default.file_content(project_id, filePath, (obj) => {
+                console.log("file_content: ", obj);
+                resolve(obj);
+            });
+        });
+        var editor = addNewEditor(file_content.data['content'], language, filePath, fileDir, wsUrl);
+        return editor;
+    }
 }
 
-export async function saveFile(editor) {
+export async function saveFile(project_id, editor, filePath) {
     let content = getCode(editor);
-    let filePath = editor2path.get(editor);
 
     let file_update = await new Promise((resolve) => {
 		webapi.default.file_update(project_id, filePath, content, (obj) => {
@@ -58,8 +57,4 @@ export async function saveFile(editor) {
 			resolve(obj);
 		});
     });
-}
-
-export function closeFile(editor) {
-    editor2path.delete(editor);
 }
