@@ -48,7 +48,7 @@ async function demo() {
 		});
 	});
 
-	const testFilePath = "/code/test_editor.cpp";
+	const testFilePath = "Compiler-BUAA-master/Compiler/main.cpp";
 
 	// CREATE A FILE
 	let file_new = await new Promise((resolve) => {
@@ -76,7 +76,7 @@ function overrideMonaco() {
 
 	console.log("Overriding Monaco StandaloneCodeEditorServiceImpl !");
 	
-	StandaloneCodeEditorServiceImpl.prototype.doOpenEditor = function (editor, input) {
+	StandaloneCodeEditorServiceImpl.prototype.doOpenEditor = async function (editor, input) {
 		let foundedModel = monaco.editor.getModel(input.resource);
 
 		console.log("foundedModel @ Go To Definition = ", foundedModel);
@@ -88,7 +88,7 @@ function overrideMonaco() {
 				return null;
 			}
 			let filePath = input.resource.path;
-			var editor = MonacoAppSingleton.addEditor(filePath, false);
+			var editor = await MonacoAppSingleton.addEditor(filePath, false);
 			editor.focus();
 		} else {
 			console.log("model have been opened");

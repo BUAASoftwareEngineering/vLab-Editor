@@ -1,3 +1,10 @@
+print("-----------------------------------------------------------------------")
+print("|                     Welcome to CCLS web server!                     |")
+print("|          Created by Xiang Weilai <xiangweilai99@gmail.com>          |")
+print("|                      Project Visual Lab Online                      |")
+print("|                             Version 1.4                             |")
+print("-----------------------------------------------------------------------")
+
 import logging
 import subprocess
 import threading
@@ -25,7 +32,7 @@ class LanguageServerWebSocketHandler(websocket.WebSocketHandler):
 
         # Create an instance of the language server
         proc = process.Subprocess(
-            ['ccls', '--init={index": {"onChange": true, "trackDependency":2}, "clang": {"resourceDir": "/home/CppLanguageServer/clang+llvm-10.0.0-x86_64-linux-gnu-ubuntu-18.04/lib/clang/10.0.0"}}'],
+            ['ccls', '--init={"index": {"onChange": true, "trackDependency":2}, "clang": {"resourceDir": "/home/CppLanguageServer/clang+llvm-10.0.0-x86_64-linux-gnu-ubuntu-18.04/lib/clang/10.0.0"}}'],
             stdin=subprocess.PIPE,
             stdout=subprocess.PIPE
         )

@@ -6,6 +6,7 @@ import {
 } from 'monaco-languageclient';
 const ReconnectingWebSocket = require('reconnecting-websocket');
 
+var connected = false;
 
 export function getCppReady(editor, BASE_DIR, url) {
 
@@ -20,17 +21,20 @@ export function getCppReady(editor, BASE_DIR, url) {
     });
 
     console.log("using Web Socket URL = ", url);
-    const webSocket = createWebSocket(url);
-    listen({
-        webSocket,
-        onConnection: connection => {
-            console.log("onConnection!")
-            // create and start the language client
-            const languageClient = createLanguageClient(connection);
-            const disposable = languageClient.start();
-            connection.onClose(() => disposable.dispose());
-        }
-    });
+    if (!connected) {
+        const webSocket = createWebSocket(url);
+        listen({
+            webSocket,
+            onConnection: connection => {
+                console.log("onConnection!")
+                connected = true;
+                // create and start the language client
+                const languageClient = createLanguageClient(connection);
+                const disposable = languageClient.start();
+                connection.onClose(() => disposable.dispose());
+            }
+        });
+    }
 }
 
 
