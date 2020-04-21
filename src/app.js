@@ -48,7 +48,8 @@ async function demo() {
 		});
 	});
 
-	const testFilePath = "Compiler-BUAA-master/Compiler/main.cpp";
+	// const testFilePath = "Compiler-BUAA-master/Compiler/main.cpp";
+	const testFilePath = "python_server_myself.py";
 
 	// CREATE A FILE
 	let file_new = await new Promise((resolve) => {

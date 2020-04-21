@@ -1,3 +1,10 @@
+print("-----------------------------------------------------------------------")
+print("|                     Welcome to PYLS web server!                     |")
+print("|          Created by Xiang Weilai <xiangweilai99@gmail.com>          |")
+print("|                      Project Visual Lab Online                      |")
+print("|                             Version 1.0                             |")
+print("-----------------------------------------------------------------------")
+
 import logging
 import subprocess
 import threading
