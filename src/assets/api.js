@@ -1,5 +1,5 @@
 const http = new XMLHttpRequest()
-const server = "http://114.116.135.181:8081"
+const server = "http://62.234.28.61:8081"
 const CPP = 'CPP'
 const PYTHON3 = 'PYTHON3'
 const PYTHON2 = 'PYTHON2'

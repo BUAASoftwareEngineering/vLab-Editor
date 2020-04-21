@@ -47,7 +47,7 @@ class LanguageServerWebSocketHandler(websocket.WebSocketHandler):
 
     def on_message(self, message):
         """Forward client->server messages to the endpoint."""
-        print(message)
+        # print(message)  # non-ascii characters cannot be printed, thus cause infinite exception & re-starting
         self.writer.write(json.loads(message))
 
     def check_origin(self, origin):

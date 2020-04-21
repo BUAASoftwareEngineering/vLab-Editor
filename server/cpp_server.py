@@ -25,7 +25,7 @@ class LanguageServerWebSocketHandler(websocket.WebSocketHandler):
 
         # Create an instance of the language server
         proc = process.Subprocess(
-            ['ccls', '--init={"cacheFormat":"json", "index": {"onChange": true, "trackDependency":2}, "clang": {"resourceDir": "/home/CppLanguageServer/clang+llvm-10.0.0-x86_64-linux-gnu-ubuntu-18.04/lib/clang/10.0.0"}}'],
+            ['ccls', '--init={index": {"onChange": true, "trackDependency":2}, "clang": {"resourceDir": "/home/CppLanguageServer/clang+llvm-10.0.0-x86_64-linux-gnu-ubuntu-18.04/lib/clang/10.0.0"}}'],
             stdin=subprocess.PIPE,
             stdout=subprocess.PIPE
         )
@@ -47,7 +47,7 @@ class LanguageServerWebSocketHandler(websocket.WebSocketHandler):
 
     def on_message(self, message):
         """Forward client->server messages to the endpoint."""
-        print(message)
+        # print(message)  # non-ascii characters cannot be printed, thus cause infinite exception & re-starting
         self.writer.write(json.loads(message))
 
     def check_origin(self, origin):

@@ -7,7 +7,7 @@ import {
 const ReconnectingWebSocket = require('reconnecting-websocket');
 
 
-export function getPythonReady(editor) {
+export function getPythonReady(editor, BASE_DIR, url) {
 
     monaco.languages.register({
         id: 'python',
@@ -15,9 +15,11 @@ export function getPythonReady(editor) {
         aliases: ['py', 'PY', 'python', 'PYTHON', 'py3', 'PY3', 'python3', 'PYTHON3'],
     });
 
-    MonacoServices.install(editor);
+    MonacoServices.install(editor, {
+        rootUri: BASE_DIR
+    });
 
-    const url = 'ws://127.0.0.1:3000/python';
+    console.log("using Web Socket URL = ", url);
     const webSocket = createWebSocket(url);
     listen({
         webSocket,
