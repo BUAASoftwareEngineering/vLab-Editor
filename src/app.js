@@ -41,15 +41,20 @@ async function demo() {
 		});
 	});
 	var project_now = project_info.data[project_info.data.length - 1];
-	await new Promise((resolve) => {
+	var project_enter = await new Promise((resolve) => {
 		webapi.default.project_enter(project_now.projectId, (obj) => {
 			console.log("project_enter: ", obj);
 			resolve(obj);
 		});
 	});
+	if (project_enter.code == 0) {
+		project_now = project_enter.data;
+	}
 
-	// const testFilePath = "Compiler-BUAA-master/Compiler/main.cpp";
-	const testFilePath = "python_server_myself.py";
+	await new Promise((r) => {setTimeout(() => {r()}, 5000)});
+
+	const testFilePath = "/code/main.cpp";
+	// const testFilePath = "/code/main.py";
 
 	// CREATE A FILE
 	let file_new = await new Promise((resolve) => {
@@ -61,14 +66,21 @@ async function demo() {
 
 	let app = new MonacoApp(project_now, "/code/");
 	MonacoAppSingleton = app;
-	await app.addEditor(testFilePath, file_new.code == 0 ? true : false);  // code == 0 --> newly created, else --> already exists
-	
-	`
+	await app.addEditor(testFilePath, file_new.code == 0 ? true : false);  // code == 0 --> newly created, else --> already exists	
+}
+
+async function close() {
+	let project_info = await new Promise((resolve) => {
+		webapi.default.project_info((obj) => {
+			console.log("project_info: ", obj);
+			resolve(obj);
+		});
+	});
+	var project_now = project_info.data[project_info.data.length - 1];
+
 	webapi.default.project_exit(project_now.projectId, (obj) => {
 		console.log("project_exit: ", obj);
-		resolve(obj);
 	});
-	`
 }
 
 
@@ -116,3 +128,4 @@ function overrideMonaco() {
 	};
 }
 demo();
+// close();

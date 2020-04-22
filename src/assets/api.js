@@ -13,7 +13,13 @@ function get_request(url, callback) {
     http.onreadystatechange = function(data) {
         if (http.readyState == 4 && http.status == 200) {
             console.log('get success')
-            var obj = eval("("+http.responseText+")")
+            var obj = {}
+            try {
+                obj = eval("("+http.responseText+")")
+            } catch (err) {
+                console.log(http.responseText)
+            }
+            
             if (obj.code == undefined) {
                 obj.code = -100
             }
@@ -51,7 +57,12 @@ function post_request(url, data, callback) {
     http.onreadystatechange = function(data) {
         if (http.readyState == 4 && http.status == 200) {
             console.log('post success')
-            var obj = eval("("+http.responseText+")")
+            var obj = {}
+            try {
+                obj = eval("("+http.responseText+")")
+            } catch (err) {
+                console.log(http.responseText)
+            }
             // console.log(http.getResponseHeader('Set-Cookie'))
             // console.log(document.cookie.length)
             if (obj.code == undefined) {
