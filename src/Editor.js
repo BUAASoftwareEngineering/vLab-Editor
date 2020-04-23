@@ -1,5 +1,5 @@
 import * as monaco from 'monaco-editor';
-import {defaultBindings} from './Actions';
+import { defaultBindings } from './Actions';
 export var fileCounter = 0;
 
 import { getPythonReady } from './language/python';
@@ -81,7 +81,7 @@ export function newEditor(container_id, code, language, filePath, fileDir, wsUrl
 
 	// Keyboard Shortcuts binding
 	defaultBindings(editor);
-	
+
 	return editor;
 }
 
@@ -113,10 +113,10 @@ export function getCodeLength(editor) {
 export function getCursorPosition(editor) {
 	let line = editor.getPosition().lineNumber;
 	let column = editor.getPosition().column;
-	return {ln: line, col:column};
+	return { ln: line, col: column };
 }
 
 export function setCursorPosition(editor, ln, col) {
-	let pos = {lineNumber: ln, column: col};
+	let pos = { lineNumber: ln, column: col };
 	editor.setPosition(pos);
 }

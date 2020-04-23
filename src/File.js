@@ -15,7 +15,7 @@ const ext2lang = new Map([
 ]);
 
 export function filePath2lang(filePath) {
-    let index= filePath.lastIndexOf(".");
+    let index = filePath.lastIndexOf(".");
     var lang;
     if (index !== -1) {
         let ext = filePath.substr(index + 1);
@@ -52,9 +52,9 @@ export async function saveFile(project_id, editor, filePath) {
     let content = getCode(editor);
 
     let file_update = await new Promise((resolve) => {
-		webapi.default.file_update(project_id, filePath, content, (obj) => {
-			console.log("file_update: ", obj);
-			resolve(obj);
-		});
+        webapi.default.file_update(project_id, filePath, content, (obj) => {
+            console.log("file_update: ", obj);
+            resolve(obj);
+        });
     });
 }

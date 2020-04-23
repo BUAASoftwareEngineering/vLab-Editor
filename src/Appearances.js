@@ -1,25 +1,25 @@
 export function setLineNumberOnOff(editor, option) {
 	// option === 'on' / 'off'
 	if (option === 'on' || option === 'off') {
-		editor.updateOptions({lineNumbers: option});
+		editor.updateOptions({ lineNumbers: option });
 	}
 }
 
 export function setMinimapOnOff(editor, option) {
 	// option === 'on' / 'off'
 	if (option === 'on') {
-		editor.updateOptions({minimap: {enabled: true}});
+		editor.updateOptions({ minimap: { enabled: true } });
 	} else if (option === 'off') {
-		editor.updateOptions({minimap: {enabled: false}});
+		editor.updateOptions({ minimap: { enabled: false } });
 	}
 }
 
 export function setFontSize(editor, size) {
-	editor.updateOptions({fontSize: size});
+	editor.updateOptions({ fontSize: size });
 }
 
 export function setFontFamily(editor, family) {
-	editor.updateOptions({fontFamily: family});
+	editor.updateOptions({ fontFamily: family });
 }
 
 export function setLanguage(editor, lang) {
@@ -78,10 +78,37 @@ export var themes = {
 };
 
 export function setTheme(themeName) {
-	fetch('/themes/'+ themes[themeName] + '.json')
-	.then(data => data.json())
-	.then(data => {
-		monaco.editor.defineTheme(themeName, data);
-		monaco.editor.setTheme(themeName);
-	});
+	fetch('/static/themes/' + themes[themeName] + '.json')
+		.then(data => data.json())
+		.then(data => {
+			monaco.editor.defineTheme(themeName, data);
+			monaco.editor.setTheme(themeName);
+		});
+}
+
+var menus = require('monaco-editor/esm/vs/platform/actions/common/actions').MenuRegistry._menuItems;
+
+export function removeUnnecessaryMenu() {
+	var stay = [
+		"editor.action.jumpToBracket",
+		"editor.action.selectToBracket",
+		"editor.action.revealDefinition",
+		"editor.action.peekDefinition",
+		"editor.action.referenceSearch.trigger",
+		"editor.action.formatDocument",
+		"editor.action.changeAll",
+		"editor.action.clipboardCutAction",
+		"editor.action.clipboardCopyAction",
+		"editor.action.clipboardPasteAction",
+	]
+
+	for (let [key, menu] of menus.entries()) {
+		if (typeof menu == "undefined") { continue; }
+		for (let index = 0; index < menu.length; index++) {
+			if (typeof menu[index].command == "undefined") { continue; }
+			if (!stay.includes(menu[index].command.id)) {
+				menu.splice(index, 1);
+			}
+		}
+	}
 }
