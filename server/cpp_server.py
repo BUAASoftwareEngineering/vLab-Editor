@@ -32,7 +32,7 @@ class LanguageServerWebSocketHandler(websocket.WebSocketHandler):
 
         # Create an instance of the language server
         proc = process.Subprocess(
-            ['ccls', '--init={"index": {"onChange": true, "trackDependency":2}, "clang": {"resourceDir": "/home/CppLanguageServer/clang+llvm-10.0.0-x86_64-linux-gnu-ubuntu-18.04/lib/clang/10.0.0"}}'],
+            ['ccls', '--init={"capabilities": {"foldingRangeProvider": false}, "index": {"onChange": true, "trackDependency":2}, "clang": {"resourceDir": "/home/CppLanguageServer/clang+llvm-10.0.0-x86_64-linux-gnu-ubuntu-18.04/lib/clang/10.0.0"}}'],
             stdin=subprocess.PIPE,
             stdout=subprocess.PIPE
         )
