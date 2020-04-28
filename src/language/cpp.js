@@ -133,7 +133,7 @@ function createDependencyProposals(range) {
             label: 'forit',
             kind: monaco.languages.CompletionItemKind.Snippet,
             documentation: "for loop with iterator++",
-            insertText: 'for (auto it = ${1:container}.start(); it != ${1:container}.end(); ++it) {\n\t${2}\n}',
+            insertText: 'for (auto it = ${1:container}.begin(); it != ${1:container}.end(); ++it) {\n\t${2}\n}',
             insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
             range: range
         },
