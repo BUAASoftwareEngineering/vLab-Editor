@@ -82,6 +82,15 @@ export function newEditor(container_id, code, language, filePath, fileDir, wsUrl
 	// Keyboard Shortcuts binding
 	defaultBindings(editor);
 
+	// Suppress CtrlCmd + S
+	editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KEY_S, ()=>{});
+
+	// Auto Remove Breakpoints
+	autoRemoveBreakpoints(editor);
+
+	// Click to Toggle Breakpoints
+	mouseToggleBreakpoints(editor);
+
 	return editor;
 }
 
@@ -119,4 +128,98 @@ export function getCursorPosition(editor) {
 export function setCursorPosition(editor, ln, col) {
 	let pos = { lineNumber: ln, column: col };
 	editor.setPosition(pos);
+}
+
+export function addBreakpoint(editor, line) {
+	let model = editor.getModel();
+	let value = {
+		range: new monaco.Range(line, 1, line, 1),
+		options: {
+			isWholeLine: true,
+			className: 'myContentClass',
+			glyphMarginClassName: 'myGlyphMarginClass'
+		}
+	}
+	model.deltaDecorations([], [value]);
+}
+
+export function removeBreakpoint(editor, line) {  // line is nullable, which means global
+	let model = editor.getModel();
+	let decorations;
+	if (typeof line === "undefined") {
+		decorations = model.getAllDecorations();
+	} else {
+		decorations = model.getLineDecorations(line);
+	}
+	let ids = [];
+	for (let dec of decorations) {
+		if (dec.options.glyphMarginClassName == "myGlyphMarginClass") {
+			ids.push(dec.id);
+		}
+	}
+	if (ids && ids.length) {
+		model.deltaDecorations(ids, []);
+	}
+}
+
+export function hasBreakpoint(editor, line) {  // line is nullable, which means global
+	let model = editor.getModel();
+	let decorations;
+	if (typeof line === "undefined") {
+		decorations = model.getAllDecorations();
+	} else {
+		decorations = model.getLineDecorations(line);
+	}
+	for (let dec of decorations) {
+		if (dec.options.glyphMarginClassName == "myGlyphMarginClass") {
+			return true;
+		}
+	}
+	return false;
+}
+
+export function getBreakpointLines(editor) {
+	let model = editor.getModel();
+	let decorations = model.getAllDecorations();
+	let lines = [];
+	for (let dec of decorations) {
+		if (dec.options.glyphMarginClassName == "myGlyphMarginClass") {
+			lines.push(dec.range.startLineNumber);
+		}
+	}
+	return lines;
+}
+
+function autoRemoveBreakpoints(editor) {
+	editor.onDidChangeModelContent((e) => {
+		this.$nextTick(() => {
+			let pos = editor.getPosition();
+			if (pos) {
+				let line = pos.lineNumber;
+				if (editor.getModel().getLineContent(line).trim() === '') {
+					removeBreakPoint(line);
+				} else if (hasBreakPoint(editor, line)) {
+					removeBreakPoint(editor, line);
+					addBreakPoint(editor, line);
+				}
+			}
+		});
+	});
+}
+
+function mouseToggleBreakpoints(editor) {
+	editor.onMouseDown((e) => {
+		if (e.target.detail && e.target.detail.offsetX && e.target.detail.offsetX >= 10 && e.target.detail.offsetX <= 20) {
+			let line = e.target.position.lineNumber;
+			if (editor.getModel().getLineContent(line).trim() === '') {
+				return;
+			}
+			if (!hasBreakPoint(line)) {
+				addBreakPoint(line);
+			} else {
+				removeBreakPoint(line);
+			}
+			document.activeElement.blur();
+		}
+	});
 }

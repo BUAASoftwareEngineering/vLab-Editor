@@ -1,42 +1,49 @@
-const http = new XMLHttpRequest()
-const server = "http://62.234.28.61:8081"
+const server = "https://api.ivlab.xyz:8443"
 const CPP = 'CPP'
 const PYTHON3 = 'PYTHON3'
 const PYTHON2 = 'PYTHON2'
 const JAVA = 'JAVA'
 const C = 'C'
-http.withCredentials = true
+
 
 function get_request(url, callback) {
+    let http = new XMLHttpRequest()
+    http.withCredentials = true
     http.open("GET", url, true)
     http.send()
-    http.onreadystatechange = function(data) {
+    http.onreadystatechange = function (data) {
         if (http.readyState == 4 && http.status == 200) {
-            console.log('get success')
-            var obj = {}
-            try {
-                obj = eval("("+http.responseText+")")
-            } catch (err) {
-                console.log(http.responseText)
+            if (url.split('?')[0] == server + '/file/download') {
+                // console.log(new Buffer(data.currentTarget.response))
+                //downloadFile(data.currentTarget.response, 'file.zip')
+            } else {
+                // console.log('get success')
+                var obj = {}
+                try {
+                    obj = eval("(" + http.responseText + ")")
+                } catch (err) {
+                    console.log(http.responseText)
+                }
+
+                if (obj.code == undefined) {
+                    obj.code = -100
+                }
+                if (obj.message == undefined) {
+                    obj.message = "Wrong format message!"
+                }
+                if (obj.data == undefined) {
+                    obj.data = {}
+                }
+                if (url.split('?')[0] == server + '/file/content') {
+                    // console.log(new Buffer(obj.data.content))
+                    obj.data.content = new TextDecoder('utf-8').decode(new Buffer(obj.data.content))
+                }
+                callback(obj)
             }
-            
-            if (obj.code == undefined) {
-                obj.code = -100
-            }
-            if (obj.message == undefined) {
-                obj.message = "Wrong format message!"
-            }
-            if (obj.data == undefined) {
-                obj.data = {}
-            }
-            if (url.split('?')[0] == server + '/file/content') {
-                obj.data.content = new TextDecoder('utf-8').decode(new Buffer(obj.data.content))
-            }
-            callback(obj)
         } else if (http.readyState == 4) {
-            console.log('get fail')
-            // console.log(eval("(" + http.responseText + ")"))
+            // console.log('get fail')
             let code = (http.status == 0) ? -100 : http.status
+            // console.log(http.responseText)
             var obj = {
                 code: code,
                 message: "Http request fail!",
@@ -45,23 +52,27 @@ function get_request(url, callback) {
             callback(obj)
         }
         // console.log(obj)
-        
+        setTimeout(function () {
+            http = null
+        }, 500)
     }
 }
 
 function post_request(url, data, callback) {
+    let http = new XMLHttpRequest()
+    http.withCredentials = true
     http.open("POST", url, true)
-    http.setRequestHeader("Content-type","application/x-www-form-urlencoded")
+    http.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
     //http.setRequestHeader("Cookie","type=lpx")
     http.send(data)
-    http.onreadystatechange = function(data) {
+    http.onreadystatechange = function (data) {
         if (http.readyState == 4 && http.status == 200) {
-            console.log('post success')
+            // console.log('post success')
             var obj = {}
             try {
-                obj = eval("("+http.responseText+")")
+                obj = eval("(" + http.responseText + ")")
             } catch (err) {
-                console.log(http.responseText)
+                // console.log(http.responseText)
             }
             // console.log(http.getResponseHeader('Set-Cookie'))
             // console.log(document.cookie.length)
@@ -77,7 +88,7 @@ function post_request(url, data, callback) {
             // console.log(document.cookie)
             callback(obj)
         } else if (http.readyState == 4) {
-            console.log('post fail')
+            // console.log('post fail')
             // console.log(http.responseText)
             let code = (http.status == 0) ? -100 : http.status
             var obj = {
@@ -88,14 +99,16 @@ function post_request(url, data, callback) {
             callback(obj)
         }
         // console.log(obj)
-        
+        setTimeout(function () {
+            http = null
+        }, 500)
     }
 }
 
 function user_login(user_name, password, callback) {
     var url = server + '/user/login'
-    var data =  'user_name=' + encodeURIComponent(user_name) + 
-                '&password=' + encodeURIComponent(password)
+    var data = 'user_name=' + encodeURIComponent(user_name) +
+        '&password=' + encodeURIComponent(password)
     post_request(url, data, callback)
 }
 
@@ -107,20 +120,20 @@ function user_logout(callback) {
 
 function user_register(user_name, password, callback) {
     var url = server + '/user/register'
-    var data =  'user_name=' + encodeURIComponent(user_name) + 
-                '&password=' + encodeURIComponent(password)
+    var data = 'user_name=' + encodeURIComponent(user_name) +
+        '&password=' + encodeURIComponent(password)
     post_request(url, data, callback)
 }
 
-function user_info_update () {
+function user_info_update() {
     var url = server + '/user/info_update'
     let callback = console.log
     if (arguments.length === 3) {
         let user_name = arguments[0]
         let password = arguments[1]
         callback = arguments[2]
-        var data =  'user_name=' + encodeURIComponent(user_name) + 
-                    '&password=' + encodeURIComponent(password)
+        var data = 'user_name=' + encodeURIComponent(user_name) +
+            '&password=' + encodeURIComponent(password)
     } else {
         let user_name = arguments[0]
         callback = arguments[1]
@@ -141,16 +154,16 @@ function project_info(callback) {
 
 function project_info_update(project_id, project_name, callback) {
     var url = server + '/project/info_update'
-    var data =  'project_id=' + encodeURIComponent(project_id) + 
-                '&project_name=' + encodeURIComponent(project_name)
+    var data = 'project_id=' + encodeURIComponent(project_id) +
+        '&project_name=' + encodeURIComponent(project_name)
     post_request(url, data, callback)
 }
 
 function project_new(project_name, project_type, callback) {
     var url = server + '/project/new'
-    var data =  'project_name=' + encodeURIComponent(project_name) + 
-                '&project_type=' + encodeURIComponent(project_type)
-    post_request(url, data, callback) 
+    var data = 'project_name=' + encodeURIComponent(project_name) +
+        '&project_type=' + encodeURIComponent(project_type)
+    post_request(url, data, callback)
 }
 
 function project_enter(project_id, callback) {
@@ -173,101 +186,109 @@ function project_delete(project_id, callback) {
 
 function file_struct(project_id, root_path, callback) {
     var url = server + '/file/struct?project_id=' + encodeURIComponent(project_id) +
-                                    '&root_path=' + encodeURIComponent(root_path)
+        '&root_path=' + encodeURIComponent(root_path)
     get_request(url, callback)
 }
 
 function file_content(project_id, file_path, callback) {
-    var url = server + '/file/content?project_id=' + encodeURIComponent(project_id) + 
-                                    '&file_path=' + encodeURIComponent(file_path)
+    var url = server + '/file/content?project_id=' + encodeURIComponent(project_id) +
+        '&file_path=' + encodeURIComponent(file_path)
     get_request(url, callback)
 }
 
 function file_update(project_id, file_path, file_content, callback) {
     var url = server + '/file/update'
-    var data =  'project_id=' + encodeURIComponent(project_id) + 
-                '&file_path=' + encodeURIComponent(file_path) + 
-                '&file_content=' + encodeURIComponent(JSON.stringify(Buffer(new TextEncoder('utf-8').encode(file_content))))
+    var data = 'project_id=' + encodeURIComponent(project_id) +
+        '&file_path=' + encodeURIComponent(file_path) +
+        '&file_content=' + encodeURIComponent(JSON.stringify(Buffer(new TextEncoder('utf-8').encode(file_content))))
     post_request(url, data, callback)
 }
 
 function file_new(project_id, file_path, callback) {
     var url = server + '/file/new'
-    var data =  'project_id=' + encodeURIComponent(project_id) + 
-                '&file_path=' + encodeURIComponent(file_path)
+    var data = 'project_id=' + encodeURIComponent(project_id) +
+        '&file_path=' + encodeURIComponent(file_path)
     post_request(url, data, callback)
 }
 
 function file_delete(project_id, file_path, callback) {
     var url = server + '/file/delete'
-    var data =  'project_id=' + encodeURIComponent(project_id) + 
-                '&file_path=' + encodeURIComponent(file_path)
+    var data = 'project_id=' + encodeURIComponent(project_id) +
+        '&file_path=' + encodeURIComponent(file_path)
     post_request(url, data, callback)
 }
 
 function file_move(project_id, old_path, new_path, force, callback) {
     var url = server + '/file/move'
-    var data =  'project_id=' + encodeURIComponent(project_id) +
-                '&old_path=' + encodeURIComponent(old_path) + 
-                '&new_path=' + encodeURIComponent(new_path) +
-                '&force=' + encodeURIComponent(force)
+    var data = 'project_id=' + encodeURIComponent(project_id) +
+        '&old_path=' + encodeURIComponent(old_path) +
+        '&new_path=' + encodeURIComponent(new_path) +
+        '&force=' + encodeURIComponent(force)
     post_request(url, data, callback)
 }
 
 function file_copy(project_id, old_path, new_path, force, callback) {
     var url = server + '/file/copy'
-    var data =  'project_id=' + encodeURIComponent(project_id) + 
-                '&old_path=' + encodeURIComponent(old_path) +
-                '&new_path=' + encodeURIComponent(new_path) +
-                '&force=' + encodeURIComponent(force)
+    var data = 'project_id=' + encodeURIComponent(project_id) +
+        '&old_path=' + encodeURIComponent(old_path) +
+        '&new_path=' + encodeURIComponent(new_path) +
+        '&force=' + encodeURIComponent(force)
     post_request(url, data, callback)
+}
+
+function file_download(project_id) {
+    var url = server + '/file/download?project_id=' + encodeURIComponent(project_id)
+    let aTag = document.createElement('a')
+    aTag.href = url
+    aTag.click()
+    //get_request(url, callback)
 }
 
 function file_rename(project_id, old_path, new_path, callback) {
     var url = server + '/file/rename'
-    var data =  'project_id=' + encodeURIComponent(project_id) + 
-                '&old_path=' + encodeURIComponent(old_path) +
-                '&new_path=' + encodeURIComponent(new_path)
+    var data = 'project_id=' + encodeURIComponent(project_id) +
+        '&old_path=' + encodeURIComponent(old_path) +
+        '&new_path=' + encodeURIComponent(new_path)
     post_request(url, data, callback)
 }
 
 function dir_new(project_id, dir_path, callback) {
     var url = server + '/dir/new'
-    var data =  'project_id=' + encodeURIComponent(project_id) +
-                '&dir_path=' + encodeURIComponent(dir_path)
+    var data = 'project_id=' + encodeURIComponent(project_id) +
+        '&dir_path=' + encodeURIComponent(dir_path)
     post_request(url, data, callback)
 }
 
 function dir_delete(project_id, dir_path, callback) {
     var url = server + '/dir/delete'
-    var data =  'project_id=' + encodeURIComponent(project_id) +
-                '&dir_path=' + encodeURIComponent(dir_path)
+    var data = 'project_id=' + encodeURIComponent(project_id) +
+        '&dir_path=' + encodeURIComponent(dir_path)
     post_request(url, data, callback)
 }
 
 function dir_move(project_id, old_path, new_path, force, callback) {
     var url = server + '/dir/move'
-    var data =  'project_id=' + encodeURIComponent(project_id) +
-                '&old_path=' + encodeURIComponent(old_path) +
-                '&new_path=' + encodeURIComponent(new_path) +
-                '&force=' + encodeURIComponent(force)
+    var data = 'project_id=' + encodeURIComponent(project_id) +
+        '&old_path=' + encodeURIComponent(old_path) +
+        '&new_path=' + encodeURIComponent(new_path) +
+        '&force=' + encodeURIComponent(force)
     post_request(url, data, callback)
 }
 
 function dir_copy(project_id, old_path, new_path, force, callback) {
     var url = server + '/dir/copy'
-    var data =  'project_id=' + encodeURIComponent(project_id) +
-                '&old_path=' + encodeURIComponent(old_path) +
-                '&new_path=' + encodeURIComponent(new_path) +
-                '&force=' + encodeURIComponent(force)
+    var data = 'project_id=' + encodeURIComponent(project_id) +
+        '&old_path=' + encodeURIComponent(old_path) +
+        '&new_path=' + encodeURIComponent(new_path) +
+        '&force=' + encodeURIComponent(force)
     post_request(url, data, callback)
 }
 
 function dir_rename(project_id, old_path, new_path, callback) {
     var url = server + '/dir/rename'
-    var data =  'project_id=' + encodeURIComponent(project_id) + 
-                '&old_path=' + encodeURIComponent(old_path) +
-                '&new_path=' + encodeURIComponent(new_path)
+    var data = 'project_id=' + encodeURIComponent(project_id) +
+        '&old_path=' + encodeURIComponent(old_path) +
+        '&new_path=' + encodeURIComponent(new_path)
     post_request(url, data, callback)
 }
 
@@ -291,6 +312,7 @@ export default {
     file_move,
     file_copy,
     file_rename,
+    file_download,
     dir_new,
     dir_delete,
     dir_move,
