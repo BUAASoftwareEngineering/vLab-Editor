@@ -192,15 +192,15 @@ export function getBreakpointLines(editor) {
 
 function autoRemoveBreakpoints(editor) {
 	editor.onDidChangeModelContent((e) => {
-		this.$nextTick(() => {
+		process.nextTick(() => {
 			let pos = editor.getPosition();
 			if (pos) {
 				let line = pos.lineNumber;
 				if (editor.getModel().getLineContent(line).trim() === '') {
-					removeBreakPoint(line);
-				} else if (hasBreakPoint(editor, line)) {
-					removeBreakPoint(editor, line);
-					addBreakPoint(editor, line);
+					removeBreakpoint(editor, line);
+				} else if (hasBreakpoint(editor, line)) {
+					removeBreakpoint(editor, line);
+					addBreakpoint(editor, line);
 				}
 			}
 		});
@@ -209,15 +209,15 @@ function autoRemoveBreakpoints(editor) {
 
 function mouseToggleBreakpoints(editor) {
 	editor.onMouseDown((e) => {
-		if (e.target.detail && e.target.detail.offsetX && e.target.detail.offsetX >= 10 && e.target.detail.offsetX <= 20) {
+		if (e.target.detail && e.target.detail.offsetX && e.target.detail.offsetX >= 10 && e.target.detail.offsetX < 20) {
 			let line = e.target.position.lineNumber;
 			if (editor.getModel().getLineContent(line).trim() === '') {
 				return;
 			}
-			if (!hasBreakPoint(line)) {
-				addBreakPoint(line);
+			if (!hasBreakpoint(editor, line)) {
+				addBreakpoint(editor, line);
 			} else {
-				removeBreakPoint(line);
+				removeBreakpoint(editor, line);
 			}
 			document.activeElement.blur();
 		}
