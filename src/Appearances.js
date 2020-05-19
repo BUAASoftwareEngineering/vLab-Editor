@@ -78,7 +78,7 @@ export var themes = {
 };
 
 export function setTheme(themeName) {
-	fetch('/static/themes/' + themes[themeName] + '.json')
+	fetch('/themes/' + themes[themeName] + '.json')
 		.then(data => data.json())
 		.then(data => {
 			monaco.editor.defineTheme(themeName, data);

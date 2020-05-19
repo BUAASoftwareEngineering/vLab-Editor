@@ -75,7 +75,7 @@ export function newEditor(container_id, code, language, filePath, fileDir, wsUrl
 	if (language == 'python') {
 		getPythonReady(editor, fileDir, wsUrlBase + "/python");
 	}
-	if (language == 'cpp') {
+	if (language == 'cpp' || language == 'c') {
 		getCppReady(editor, fileDir, wsUrlBase + "/cpp");
 	}
 

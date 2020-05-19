@@ -11,9 +11,10 @@ var overrided = false;
 export var MonacoAppSingleton;
 
 export class MonacoApp {
-	constructor(project_info_data_element, BASE_DIR) {
+	constructor(project_info_data_element, BASE_DIR, author = undefined) {
 		this.currentProject = project_info_data_element;
 		this.BASE_DIR = BASE_DIR;
+		this.authorName = author;
 		this.wsUrl = "ws://" + this.currentProject.ip + ":" + this.currentProject.languagePort;
 		appearance.setTheme('xcode-default');
 		this.model2editor = new Map();
@@ -22,10 +23,10 @@ export class MonacoApp {
 		removeUnnecessaryMenu();
 	}
 
-	async addEditor(filePath, newlyCreated = true) {
+	async addEditor(filePath, defaultCode = true) {
 		if (!overrided)
 			overrideMonaco();
-		var editor = await File.openFile(this.currentProject.projectId, filePath, this.BASE_DIR, this.wsUrl, newlyCreated);
+		var editor = await File.openFile(this.currentProject.projectId, filePath, this.BASE_DIR, this.wsUrl, defaultCode);
 		editor.onDidChangeModelContent((e) => {
 			File.saveFile(this.currentProject.projectId, editor, filePath);
 		});
@@ -58,6 +59,7 @@ async function demo() {
 	await new Promise((r) => { setTimeout(() => { r() }, 5000) });
 
 	const testFilePath = "/code/main.cpp";
+	// const testFilePath = "/code/main.c";
 	// const testFilePath = "/code/main.py";
 
 	// CREATE A FILE
@@ -69,6 +71,7 @@ async function demo() {
 	});
 
 	let app = new MonacoApp(project_now, "/code/");
+	// let app = new MonacoApp(project_now, "/code/", "FuturexGO");
 	MonacoAppSingleton = app;
 	await app.addEditor(testFilePath, file_new.code == 0 ? true : false);  // code == 0 --> newly created, else --> already exists	
 }
