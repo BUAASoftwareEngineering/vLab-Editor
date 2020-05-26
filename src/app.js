@@ -6,6 +6,8 @@ import { removeUnnecessaryMenu } from './Appearances';
 import * as webapi from './assets/api';
 
 import { StandaloneCodeEditorServiceImpl } from 'monaco-editor/esm/vs/editor/standalone/browser/standaloneCodeServiceImpl.js';
+import { getCode, getCodeLength, addNewScratchEditor } from "./Editor";
+import { defaultCode_language } from './DefaultCodes.js';
 
 var overrided = false;
 export var MonacoAppSingleton;
@@ -35,6 +37,31 @@ export class MonacoApp {
 	}
 }
 
+export class MonacoAppScratch {
+	constructor(language = "python", defaultCode = true, author = undefined) {
+		if (defaultCode == true) {
+			this.editor = addNewScratchEditor(defaultCode_language(language, author), language);
+		} else {
+			this.editor = addNewScratchEditor("", language);
+		}
+		appearance.setTheme('xcode-default');
+		removeUnnecessaryMenu();
+		removeUnnecessaryMenu();
+		removeUnnecessaryMenu();
+	}
+
+	getEditorInstance() {
+		return this.editor;
+	}
+
+	getCode() {
+		return getCode(this.editor);
+	}
+
+	getCodeLength() {
+		return getCodeLength(this.editor);
+	}
+}
 
 async function demo() {
 
@@ -90,6 +117,13 @@ async function close() {
 	});
 }
 
+function scratchDemo() {
+	let scratchPaper = new MonacoAppScratch("cpp", true, "FuturexGO");
+	setTimeout(() => {
+		console.log(scratchPaper.getCodeLength());
+		console.log(scratchPaper.getCode());
+	}, 10000);
+}
 
 function overrideMonaco() {
 	overrided = true;
@@ -134,5 +168,6 @@ function overrideMonaco() {
 		return editor;
 	};
 }
-demo();
+// demo();
 // close();
+scratchDemo();
