@@ -7,6 +7,7 @@ import {
 const ReconnectingWebSocket = require('reconnecting-websocket');
 
 import { python_keys } from './staticProvider';
+import { getTokens } from './tokenizer';
 
 var connected = false;
 
@@ -33,7 +34,7 @@ export function getPythonReady(editor, BASE_DIR, url) {
                 endColumn: word.endColumn
             };
             return {
-                suggestions: createDependencyProposals(range, languageService)
+                suggestions: createDependencyProposals(range, languageService, editor, word)
             };
         }
     });
@@ -96,7 +97,7 @@ function createLanguageClient(connection) {
 }
 
 
-function createDependencyProposals(range, languageService = false) {
+function createDependencyProposals(range, languageService = false, editor, curWord) {
     let snippets = [
         {
             label: 'main',
@@ -174,9 +175,23 @@ function createDependencyProposals(range, languageService = false) {
         });
     }
 
+    let words = [];
+    let tokens = getTokens(editor.getModel().getValue());
+    for (const item of tokens) {
+        if (item != curWord.word) {
+            words.push({
+                label: item,
+                kind: monaco.languages.CompletionItemKind.Text,
+                documentation: "",
+                insertText: item,
+                range: range
+            });
+        }
+    }
+
     if (languageService) {
         return snippets;
     } else {
-        return snippets.concat(keys);
+        return snippets.concat(keys).concat(words);
     }
 }
