@@ -119,6 +119,13 @@ export function addNewScratchEditor(code, language) {
 		model: model,
 		automaticLayout: true,
 	});
+	// Language Client for IntelliSense
+	if (language == 'python') {
+		getPythonReady(editor);
+	}
+	if (language == 'cpp' || language == 'c') {
+		getCppReady(editor);
+	}
 	// Keyboard Shortcuts binding
 	defaultBindings(editor);
 	// Suppress CtrlCmd + S

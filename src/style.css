@@ -83,3 +83,19 @@ body {
     overflow: hidden;
     z-index: 0;
 }
+
+#scratch {
+    position: fixed;
+    top: 60px;
+    left: 0;
+    height: 300px;
+    width: 80vw;
+    right: 0;
+  
+    margin: 0 auto;
+    display: block;
+  
+    transition: 0.2s;
+    overflow: hidden;
+    z-index: 0;
+}

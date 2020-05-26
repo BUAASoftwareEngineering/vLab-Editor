@@ -6,6 +6,8 @@ import {
 } from 'monaco-languageclient';
 const ReconnectingWebSocket = require('reconnecting-websocket');
 
+import { cpp_keys } from './staticProvider';
+
 var connected = false;
 
 export function getCppReady(editor, BASE_DIR, url) {
@@ -16,8 +18,13 @@ export function getCppReady(editor, BASE_DIR, url) {
         aliases: ['cpp', 'CPP', 'c', 'C'],
     });
 
+    let languageService = false;
+    if (typeof BASE_DIR != "undefined" && typeof url != "undefined") {
+        languageService = true;
+    }
+
     monaco.languages.registerCompletionItemProvider('cpp', {
-        provideCompletionItems: function(model, position) {
+        provideCompletionItems: function (model, position) {
             var word = model.getWordUntilPosition(position);
             var range = {
                 startLineNumber: position.lineNumber,
@@ -26,29 +33,31 @@ export function getCppReady(editor, BASE_DIR, url) {
                 endColumn: word.endColumn
             };
             return {
-                suggestions: createDependencyProposals(range)
+                suggestions: createDependencyProposals(range, languageService)
             };
         }
     });
 
-    MonacoServices.install(editor, {
-        rootUri: BASE_DIR
-    });
-
-    console.log("using Web Socket URL = ", url);
-    if (!connected) {
-        const webSocket = createWebSocket(url);
-        listen({
-            webSocket,
-            onConnection: connection => {
-                console.log("onConnection!")
-                connected = true;
-                // create and start the language client
-                const languageClient = createLanguageClient(connection);
-                const disposable = languageClient.start();
-                connection.onClose(() => disposable.dispose());
-            }
+    if (languageService) {
+        MonacoServices.install(editor, {
+            rootUri: BASE_DIR
         });
+
+        console.log("using Web Socket URL = ", url);
+        if (!connected) {
+            const webSocket = createWebSocket(url);
+            listen({
+                webSocket,
+                onConnection: connection => {
+                    console.log("onConnection!")
+                    connected = true;
+                    // create and start the language client
+                    const languageClient = createLanguageClient(connection);
+                    const disposable = languageClient.start();
+                    connection.onClose(() => disposable.dispose());
+                }
+            });
+        }
     }
 }
 
@@ -87,8 +96,8 @@ function createLanguageClient(connection) {
 }
 
 
-function createDependencyProposals(range) {
-    return [
+function createDependencyProposals(range, languageService = false) {
+    let snippets = [
         {
             label: 'main',
             kind: monaco.languages.CompletionItemKind.Snippet,
@@ -154,4 +163,20 @@ function createDependencyProposals(range) {
             range: range
         },
     ];
+    let keys = [];
+    for (const item of cpp_keys) {
+        keys.push({
+            label: item,
+            kind: monaco.languages.CompletionItemKind.Keyword,
+            documentation: "",
+            insertText: item,
+            range: range
+        });
+    }
+
+    if (languageService) {
+        return snippets;
+    } else {
+        return snippets.concat(keys);
+    }
 }
